@@ -1,0 +1,101 @@
+Perfect — here’s how to do everything from your iPhone, step-by-step:
+
+⸻
+
+Step 1: Use GitHub’s Website on Mobile
+	1.	Go to: https://github.com
+	2.	Sign in or create a free account
+	3.	Tap the + icon at the top right → select “New repository”
+	4.	Name it: nhs-counter
+	5.	Set to Public
+	6.	Tap Create repository
+
+⸻
+
+Step 2: Create the HTML File (Using GitHub Mobile)
+	1.	In your new repo, tap “Add file” → “Create new file”
+	2.	Name it:
+index.html
+	3.	Paste the full code below
+
+⸻
+
+Paste This Into the File:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>NHS Spending Counter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 40px 20px;
+      background: #f0f8ff;
+      color: #111;
+    }
+    h1 {
+      margin-bottom: 30px;
+    }
+    h2 {
+      margin-top: 40px;
+      margin-bottom: 15px;
+    }
+    .counter {
+      font-size: 1.5em;
+      margin: 10px 0;
+    }
+    ul.breakdown, ul.facts {
+      list-style: none;
+      padding: 0;
+      max-width: 400px;
+      margin: 0 auto;
+      text-align: left;
+    }
+    ul.breakdown li,
+    ul.facts li {
+      background: #fff;
+      padding: 10px;
+      margin: 6px 0;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <h1>Live NHS Spending Counter</h1>
+  <div class="counter" id="todaySpend">NHS Spending So Far Today: £0.00</div>
+  <div class="counter" id="perSecond">Per Second: £0.00</div>
+  <div class="counter" id="perMinute">Per Minute: £0.00</div>
+  <div class="counter" id="perHour">Per Hour: £0.00</div>
+  <div class="counter" id="perDay">Per Day: £0.00</div>
+  <div class="counter" id="total">Total Since Page Load: £0.00</div>
+
+  <hr>
+
+  <h2>NHS Daily Spending Breakdown (Estimates)</h2>
+  <ul class="breakdown">
+    <li>Staff Salaries: £287M</li>
+    <li>Medications & Treatments: £95M</li>
+    <li>Operations & Surgeries: £50M</li>
+    <li>Mental Health Services: £45M</li>
+    <li>Emergency Services: £30M</li>
+    <li>Admin & Infrastructure: £19M</li>
+  </ul>
+
+  <hr>
+
+  <h2>Fast Facts</h2>
+  <ul class="facts">
+    <li>Over 1.5 million people work for the NHS</li>
+    <li>The NHS handles more than 1 million patients every 36 hours</li>
+    <li>£526 million is spent every single day</li>
+    <li>NHS budget is larger than the GDP of 130 countries</li>
+  </ul>
+
+  <script>
+    const annualBudget = 192000000000; // £192 billion
+    const perDay = annualBudget / 365;
+    const perHour = perDay / 24;
+    const per
