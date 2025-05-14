@@ -1,27 +1,3 @@
-Perfect — here’s how to do everything from your iPhone, step-by-step:
-
-⸻
-
-Step 1: Use GitHub’s Website on Mobile
-	1.	Go to: https://github.com
-	2.	Sign in or create a free account
-	3.	Tap the + icon at the top right → select “New repository”
-	4.	Name it: nhs-counter
-	5.	Set to Public
-	6.	Tap Create repository
-
-⸻
-
-Step 2: Create the HTML File (Using GitHub Mobile)
-	1.	In your new repo, tap “Add file” → “Create new file”
-	2.	Name it:
-index.html
-	3.	Paste the full code below
-
-⸻
-
-Paste This Into the File:
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -95,7 +71,39 @@ Paste This Into the File:
   </ul>
 
   <script>
-    const annualBudget = 192000000000; // £192 billion
+    const annualBudget = 192000000000;
     const perDay = annualBudget / 365;
     const perHour = perDay / 24;
-    const per
+    const perMinute = perHour / 60;
+    const perSecond = perMinute / 60;
+    let totalSpent = 0;
+
+    function formatCurrency(amount) {
+      return '£' + amount.toLocaleString(undefined, { maximumFractionDigits: 2 });
+    }
+
+    function updatePageLoadCounter() {
+      totalSpent += perSecond;
+      document.getElementById("total").innerText = `Total Since Page Load: ${formatCurrency(totalSpent)}`;
+    }
+
+    function updateTodayCounter() {
+      const now = new Date();
+      const secondsSinceMidnight = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+      const todaySpent = secondsSinceMidnight * perSecond;
+
+      document.getElementById("todaySpend").innerText =
+        `NHS Spending So Far Today: ${formatCurrency(todaySpent)}`;
+    }
+
+    window.onload = function () {
+      document.getElementById("perSecond").innerText = `Per Second: ${formatCurrency(perSecond)}`;
+      document.getElementById("perMinute").innerText = `Per Minute: ${formatCurrency(perMinute)}`;
+      document.getElementById("perHour").innerText = `Per Hour: ${formatCurrency(perHour)}`;
+      document.getElementById("perDay").innerText = `Per Day: ${formatCurrency(perDay)}`;
+      setInterval(updatePageLoadCounter, 1000);
+      setInterval(updateTodayCounter, 1000);
+    };
+  </script>
+</body>
+</html>
