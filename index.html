@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>NHS Spending Tracker</title>
+  <title>NHS Spending Tracker | 2025 Edition</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       font-family: "Segoe UI", sans-serif;
@@ -25,6 +26,7 @@
     .date-info {
       font-size: 14px;
       color: #444;
+      margin-bottom: 20px;
     }
 
     .counters {
@@ -39,8 +41,8 @@
     }
 
     section {
-      margin: 30px auto;
-      max-width: 600px;
+      margin: 40px auto;
+      max-width: 700px;
     }
 
     section h2 {
@@ -85,12 +87,13 @@
 
   <div class="counters">
     <div class="counter" id="todaySpend">Today's Spend: £0.00</div>
-    <div class="counter" id="thisYearSpend">2025–26 Spend So Far: £0.00</div>
+    <div class="counter" id="perSecond">Per Second: £0.00</div>
     <div class="counter" id="total">Since Page Load: £0.00</div>
+    <div class="counter" id="thisYearSpend">2025–26 Spend So Far: £0.00</div>
   </div>
 
   <section>
-    <h2>Breakdown of NHS Daily Spending</h2>
+    <h2>Estimated Daily Breakdown</h2>
     <ul>
       <li>Staff Salaries: £287M</li>
       <li>Medications & Treatments: £95M</li>
@@ -102,30 +105,31 @@
   </section>
 
   <section>
-    <h2>Other Hidden NHS Costs</h2>
+    <h2>Hidden or Avoidable Costs</h2>
     <ul>
-      <li>Translation & Interpreter Services: £25M+</li>
-      <li>Prescription Waste: £300M per year</li>
-      <li>Medical Negligence Payouts: £2.6B in 2022–23</li>
-      <li>PPE Waste & Disposal: Hundreds of millions post-COVID</li>
-      <li>IT System Upgrades: Tens of millions in contracts</li>
-      <li>Management Consultants: £100M+ per year</li>
+      <li>Translation & Interpreter Services: £200M+ annually</li>
+      <li>Prescription Waste: £300M (unused, returned, or binned medication)</li>
+      <li>Unpaid Overseas Patient Bills: £150–300M yearly losses</li>
+      <li>Abandoned IT Record System: £10B wasted</li>
+      <li>Crumbled NHS Buildings: £14B repair backlog (incl. £2.7B high-risk)</li>
+      <li>20,000 Cancelled Operations in 3 Months (Q3 2023)</li>
+      <li>£40B shortfall in health investment compared to other nations</li>
     </ul>
   </section>
 
   <section>
-    <h2>Unpaid Overseas Patient Costs</h2>
+    <h2>What £600 Million a Day Could Fund</h2>
     <ul>
-      <li>Estimated Unpaid Foreign Patient Invoices: £263M annually</li>
-      <li>Majority of bills never collected once patients leave UK</li>
+      <li>60,000 hip replacements every 24 hours</li>
+      <li>15,000 nurse salaries paid daily</li>
+      <li>1,200 brand new ambulances</li>
+      <li>More than the entire GDP of Malta or Iceland</li>
     </ul>
   </section>
 
   <script>
-    const annualBudget = 192000000000;
-    const perDay = annualBudget / 365;
-    const perSecond = perDay / 86400;
-
+    const dailySpend = 600000000; // £600 million
+    const perSecond = dailySpend / 86400;
     let totalSpent = 0;
 
     function formatCurrency(amount) {
@@ -138,21 +142,21 @@
         `Since Page Load: ${formatCurrency(totalSpent)}`;
     }
 
-    function updateTodayAndYearSpend() {
+    function updateSpendingStats() {
       const now = new Date();
-
       const secondsSinceMidnight = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
       const todaySpent = secondsSinceMidnight * perSecond;
       document.getElementById("todaySpend").innerText =
         `Today's Spend: ${formatCurrency(todaySpent)}`;
 
+      document.getElementById("perSecond").innerText =
+        `Per Second: ${formatCurrency(perSecond)}`;
+
       const fiscalYearStart = new Date(now.getFullYear(), 3, 1);
-      if (now < fiscalYearStart) {
-        fiscalYearStart.setFullYear(fiscalYearStart.getFullYear() - 1);
-      }
+      if (now < fiscalYearStart) fiscalYearStart.setFullYear(fiscalYearStart.getFullYear() - 1);
       const msInDay = 1000 * 60 * 60 * 24;
       const daysSinceFiscal = Math.floor((now - fiscalYearStart) / msInDay) + 1;
-      const yearSpent = daysSinceFiscal * perDay;
+      const yearSpent = daysSinceFiscal * dailySpend;
 
       document.getElementById("thisYearSpend").innerText =
         `2025–26 Spend So Far: ${formatCurrency(yearSpent)}`;
@@ -168,9 +172,9 @@
     }
 
     window.onload = function () {
-      updateTodayAndYearSpend();
+      updateSpendingStats();
       setInterval(updatePageLoadCounter, 1000);
-      setInterval(updateTodayAndYearSpend, 10000);
+      setInterval(updateSpendingStats, 10000);
     };
   </script>
 </body>
