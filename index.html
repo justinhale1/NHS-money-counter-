@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>NHS Spending Counter</title>
+  <title>NHS Spending Tracker</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -12,7 +12,7 @@
       color: #111;
     }
     h1 {
-      margin-bottom: 30px;
+      margin-bottom: 10px;
     }
     h2 {
       margin-top: 40px;
@@ -22,15 +22,19 @@
       font-size: 1.5em;
       margin: 10px 0;
     }
-    ul.breakdown, ul.facts {
+    .date-info {
+      font-size: 1em;
+      margin-top: 10px;
+      color: #333;
+    }
+    ul.section {
       list-style: none;
       padding: 0;
-      max-width: 400px;
+      max-width: 500px;
       margin: 0 auto;
       text-align: left;
     }
-    ul.breakdown li,
-    ul.facts li {
+    ul.section li {
       background: #fff;
       padding: 10px;
       margin: 6px 0;
@@ -40,18 +44,15 @@
   </style>
 </head>
 <body>
-  <h1>Live NHS Spending Counter</h1>
-  <div class="counter" id="todaySpend">NHS Spending So Far Today: £0.00</div>
-  <div class="counter" id="perSecond">Per Second: £0.00</div>
-  <div class="counter" id="perMinute">Per Minute: £0.00</div>
-  <div class="counter" id="perHour">Per Hour: £0.00</div>
-  <div class="counter" id="perDay">Per Day: £0.00</div>
-  <div class="counter" id="total">Total Since Page Load: £0.00</div>
+  <h1>Live NHS Spending Tracker</h1>
+  <div class="date-info" id="dateInfo"></div>
 
-  <hr>
+  <div class="counter" id="todaySpend">Today's Spend: £0.00</div>
+  <div class="counter" id="thisYearSpend">2025–26 Spend So Far: £0.00</div>
+  <div class="counter" id="total">Since Page Load: £0.00</div>
 
-  <h2>NHS Daily Spending Breakdown (Estimates)</h2>
-  <ul class="breakdown">
+  <h2>Breakdown of NHS Daily Spending</h2>
+  <ul class="section">
     <li>Staff Salaries: £287M</li>
     <li>Medications & Treatments: £95M</li>
     <li>Operations & Surgeries: £50M</li>
@@ -60,22 +61,27 @@
     <li>Admin & Infrastructure: £19M</li>
   </ul>
 
-  <hr>
+  <h2>Other Hidden NHS Costs</h2>
+  <ul class="section">
+    <li>Translation & Interpreter Services: £25M+</li>
+    <li>Prescription Waste: £300M per year</li>
+    <li>Medical Negligence Payouts: £2.6B in 2022–23</li>
+    <li>PPE Waste & Disposal: Hundreds of millions post-COVID</li>
+    <li>IT System Upgrades: Tens of millions in contracts</li>
+    <li>Management Consultants: £100M+ per year</li>
+  </ul>
 
-  <h2>Fast Facts</h2>
-  <ul class="facts">
-    <li>Over 1.5 million people work for the NHS</li>
-    <li>The NHS handles more than 1 million patients every 36 hours</li>
-    <li>£526 million is spent every single day</li>
-    <li>NHS budget is larger than the GDP of 130 countries</li>
+  <h2>Unpaid Overseas Patient Costs</h2>
+  <ul class="section">
+    <li>Estimated Unpaid Foreign Patient Invoices: £263M annually</li>
+    <li>Majority of bills never collected once patients leave UK</li>
   </ul>
 
   <script>
     const annualBudget = 192000000000;
     const perDay = annualBudget / 365;
-    const perHour = perDay / 24;
-    const perMinute = perHour / 60;
-    const perSecond = perMinute / 60;
+    const perSecond = perDay / 86400;
+
     let totalSpent = 0;
 
     function formatCurrency(amount) {
@@ -84,25 +90,46 @@
 
     function updatePageLoadCounter() {
       totalSpent += perSecond;
-      document.getElementById("total").innerText = `Total Since Page Load: ${formatCurrency(totalSpent)}`;
+      document.getElementById("total").innerText =
+        `Since Page Load: ${formatCurrency(totalSpent)}`;
     }
 
-    function updateTodayCounter() {
+    function updateTodayAndYearSpend() {
       const now = new Date();
+
+      // Today's spend
       const secondsSinceMidnight = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
       const todaySpent = secondsSinceMidnight * perSecond;
-
       document.getElementById("todaySpend").innerText =
-        `NHS Spending So Far Today: ${formatCurrency(todaySpent)}`;
+        `Today's Spend: ${formatCurrency(todaySpent)}`;
+
+      // Year-to-date spend (from April 1)
+      const fiscalYearStart = new Date(now.getFullYear(), 3, 1); // April 1
+      if (now < fiscalYearStart) {
+        fiscalYearStart.setFullYear(fiscalYearStart.getFullYear() - 1);
+      }
+      const msInDay = 1000 * 60 * 60 * 24;
+      const daysSinceFiscal = Math.floor((now - fiscalYearStart) / msInDay) + 1;
+      const yearSpent = daysSinceFiscal * perDay;
+
+      document.getElementById("thisYearSpend").innerText =
+        `2025–26 Spend So Far: ${formatCurrency(yearSpent)}`;
+
+      // Date info
+      const dateString = now.toLocaleDateString('en-GB', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+      document.getElementById("dateInfo").innerText =
+        `${dateString} – Day ${daysSinceFiscal} of the financial year`;
     }
 
     window.onload = function () {
-      document.getElementById("perSecond").innerText = `Per Second: ${formatCurrency(perSecond)}`;
-      document.getElementById("perMinute").innerText = `Per Minute: ${formatCurrency(perMinute)}`;
-      document.getElementById("perHour").innerText = `Per Hour: ${formatCurrency(perHour)}`;
-      document.getElementById("perDay").innerText = `Per Day: ${formatCurrency(perDay)}`;
+      updateTodayAndYearSpend();
       setInterval(updatePageLoadCounter, 1000);
-      setInterval(updateTodayCounter, 1000);
+      setInterval(updateTodayAndYearSpend, 10000);
     };
   </script>
 </body>
